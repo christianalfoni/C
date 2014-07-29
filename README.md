@@ -100,13 +100,14 @@ var secondChild = SomeChild.create({});
 console.log(aChild.getList() === secondChild.getList()); // => false
 ```
 
-The two lists are now not inherited, but created for each instance.
+The two lists are now **not** inherited, but created for each instance. Any **options** passed will be passed to the parent constructors, you only need to call *parent()*. 
 
 ### Summary
 - Use **extend** to define and **create** to instantiate
 - Put everything inside the *constructor* function and let your methods take advantage of privately defined variables
 - Use **parent()** to copy inherited properties to the instance
 - Debugging is easy as all your "classes" will be named and reflect their definition
+- Note that constructors only take one argument, which is options. This is by design, constructors should only handle objects as values are better defined in an object than passing them directly to the constructor. If not options are passed, it will be an empty object, no need to *options = options || {}*
 
 # Why build it?
 I have been uneasy of the idea of inheritance in JavaScript, it has some issues. I was initially a fan of how Backbone handles inhertiance, though it also misses some pieces. F.ex. all complex objects defined er shared between instances, you have no private variables when defining your object etc.
