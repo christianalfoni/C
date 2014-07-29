@@ -18,12 +18,14 @@ var MyBase = C(function MyBase (options) {
 var SomeChild = MyBase.extend(function SomeChild (options) {
 
   this.myChildMethod = function () {
-  
+    return options.foo;
   }
 
 });
 
-var myChild = SomeChild.create({});
+var myChild = SomeChild.create({
+  foo: 'bar'
+});
 console.log(myChild); 
 /*
   SomeChild
@@ -35,7 +37,7 @@ console.log(myChild instanceof SomeChild); // => true
 console.log(myChild instanceof MyBase); // => true
 ```
 
-As you can see on the log result you will get a natural NAMED inheritance. checking instanceof will also give the correct result.
+As you can see on the log result you will get a natural NAMED inheritance. checking instanceof will also give the correct result. Pass an object as an "argument description"
 
 ## Privates
 ```javascript
@@ -51,8 +53,8 @@ var MyBase = C(function MyBase (options) {
   
 });
 
-var myBaseOne = MyBase.create({});
-var myBaseTwo = MyBase.create({});
+var myBaseOne = MyBase.create();
+var myBaseTwo = MyBase.create();
 myBaseOne.addDefault();
 console.log(myBaseOne.getList()); // => ['default']
 console.log(myBaseTwo.getList()); // => []
