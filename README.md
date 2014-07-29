@@ -48,6 +48,7 @@ var MyBase = C(function MyBase (options) {
   this.getList = function () {
     return list;
   };
+  
 });
 
 var myBaseOne = MyBase.create({});
