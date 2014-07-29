@@ -37,7 +37,7 @@ console.log(myChild instanceof SomeChild); // => true
 console.log(myChild instanceof MyBase); // => true
 ```
 
-As you can see on the log result you will get a natural NAMED inheritance. checking instanceof will also give the correct result. Pass an object as an "argument description"
+As you can see on the log result you will get a natural NAMED inheritance. checking instanceof will also give the correct result. Pass an object with arguments, instead of multiple arguments. If not object is passed, it will become an empty object
 
 ## Privates
 ```javascript
