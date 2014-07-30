@@ -1,21 +1,32 @@
 (function (window) {
-  function C () {}
+  function C () {
+    if (this instanceof C) { // return if called with NEW
+      return;
+    }
+    return C.extend.apply(C, arguments); // If C is called directly, run extend. It is a conveniance
+  }
   
   C.prototype = {
     constructor: C
   }
   
   C.extend = function (constr) {
-    constr.parent = this;
+    
+    // If two arguments, name the constructor
+    if (arguments.length === 2) {
+      constr = new Function(arguments[1].toString().replace('function', 'return function ' + arguments[0] + ' '))();
+      
+    }
+    constr.parentConstr = this;
     constr.prototype = new this({}, function () {});
     constr.extend = this.extend;
     constr.create = this.create;
-    constr.purge = function (obj, options) {
+    constr.parent = function (obj, options) {
       return function () {
-        var parent = constr.parent;
+        var parent = constr.parentConstr;
         while (parent) {
-          parent.call(obj, options, parent.purge ? parent.purge(obj, options) : null);
-          parent = parent.parent;
+          parent.call(obj, options, parent.parentConstr ? parent.parent(obj, options) : null);
+          parent = parent.parentConstr;
         }
 
       }
@@ -26,7 +37,7 @@
   C.create = function (options) {
     options = options || {};
     var obj = Object.create(this.prototype);
-    this.call(obj, options, this.purge(obj, options));
+    this.call(obj, options, this.parent(obj, options));
     obj.constructor = this;
     return obj;
   };
