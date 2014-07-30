@@ -37,7 +37,7 @@ console.log(myChild instanceof SomeChild); // => true
 console.log(myChild instanceof MyBase); // => true
 ```
 
-As you can see on the log result you will get a natural NAMED inheritance. Checking **instanceof* will also give the correct result. Pass an object with arguments, instead of multiple arguments. This is by design. Passing an object with arguments describes what the aruments actually are and it makes it more scalable, not ending up with 5 arguments in a row. If you do not pass an object, it will become an empty object. It is not necessary in your constructors to write: *options = options || {}*.
+As you can see on the log result you will get a natural NAMED inheritance. Checking **instanceof* will also give the correct result. Pass an object with arguments, instead of multiple arguments. This is by design. Passing an object with arguments describes what the arguments actually are and it makes it more scalable, not ending up with 5 arguments in a row. If you do not pass an object, it will become an empty object. It is not necessary in your constructors to write: *options = options || {}*.
 
 ## Privates
 ```javascript
@@ -55,6 +55,7 @@ var MyBase = C(function MyBase (options) {
 
 var myBaseOne = MyBase.create();
 var myBaseTwo = MyBase.create();
+myBaseOne.add('default');
 console.log(myBaseOne.getList()); // => ['default']
 console.log(myBaseTwo.getList()); // => []
 ```
@@ -116,6 +117,17 @@ console.log(new MyBase()); // => SomethingCool {}
 
 You might need to name your constructor dynamically. Pass in a string as the first argument to either *C* or *extend* to give the constructor a name.
 
+## Instantiate with init
+```javascript
+var MyBase = C(function MyConstructor (options, parent) {
+  this.init = function () {
+    console.log('Init!');
+  };
+});
+MyBase.create(); // => Init!
+```
+If you add an init method it will run when you instantiate a constructor with **create**. If you use *parent()* and any parents have an init method, they will also be called as they are being *merged* into your object.
+
 ### Summary
 - Use **extend** to define and **create** to instantiate
 - Put everything inside the *constructor* function and let your methods take advantage of privately defined variables
@@ -123,6 +135,7 @@ You might need to name your constructor dynamically. Pass in a string as the fir
 - Debugging is easy as all your "classes" will be named and reflect their definition
 - Note that constructors only take one argument, which is options. This is by design, constructors should only handle objects as values are better defined in an object than passing them directly to the constructor. If not options are passed, it will be an empty object, no need to *options = options || {}*
 - Dynamically name your constructors
+- Use init methods to run code when instantiating
 
 # Why build it?
 I have been uneasy with the idea of inheritance in JavaScript, it has some issues. I was initially a fan of how Backbone handles inheritance, though it also misses some pieces. F.ex. all complex objects defined are shared between instances, you have no private variables when defining your object etc.
