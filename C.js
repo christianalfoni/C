@@ -26,6 +26,9 @@
         var parent = constr.parentConstr;
         while (parent) {
           parent.call(obj, options, parent.parentConstr ? parent.parent(obj, options) : null);
+          if (parent !== C && obj.init) { // Call init up the chain, except on top
+            obj.init();
+          }
           parent = parent.parentConstr;
         }
 
@@ -39,6 +42,9 @@
     var obj = Object.create(this.prototype);
     this.call(obj, options, this.parent(obj, options));
     obj.constructor = this;
+    if (obj.init) {
+      obj.init();
+    }
     return obj;
   };
 
