@@ -41,7 +41,12 @@
     options = options || {};
     var obj = Object.create(this.prototype);
     this.call(obj, options, this.parent(obj, options));
-    obj.constructor = this;
+    Object.defineProperty(obj, 'constructor', {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: this
+    });
     if (obj.init) {
       obj.init();
     }
